@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Bibliothèque{% endblock %}</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+        }
+
+        .btn-success { background: #27ae60; }
+        .btn-danger { background: #e74c3c; }
+        .btn-warning { background: #f39c12; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+        }
+
+        tr:hover { background: #f5f5f5; }
+
+        .disponible { color: #27ae60; font-weight: bold; }
+        .indisponible { color: #e74c3c; font-weight: bold; }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            align-items: center;
+        }
+
+        .nav-bar span {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-right: 5px;
+        }
+
+        .btn-filter {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #8e44ad;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .btn-filter:hover {
+            background: #7d3c98;
+        }
+
+        .btn-filter.active {
+            background: #2c3e50;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Gestionnaire de Bibliothèque</h1>
+        <p><strong>Enseignante : Houria El Ghoul</strong></p>
+
+        <div class="nav-bar">
+            <span>Filtrer par catégorie :</span>
+            <a href="{{ path('app_livre_index') }}" class="btn-filter">Tous les livres</a>
+            {% for cat in categories|default([]) %}
+                <a href="{{ path('app_categorie_livres', {'id': cat.id}) }}" class="btn-filter">{{ cat.nom }}</a>
+            {% endfor %}
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
+        {% block body %}{% endblock %}
+    </div>
+</body>
+</html>

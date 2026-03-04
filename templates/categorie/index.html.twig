@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégorie : {{ categorie.nom }}{% endblock %}
+
+{% block body %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2>Catégorie : {{ categorie.nom }}</h2>
+    <a href="{{ path('app_livre_index') }}" class="btn">Voir tous les livres</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Année</th>
+            <th>Disponibilité</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for livre in livres %}
+            <tr>
+                <td>{{ livre.titre }}</td>
+                <td>{{ livre.auteur }}</td>
+                <td>{{ livre.annee }}</td>
+                <td>
+                    {% if livre.disponible %}
+                        <span class="disponible">Disponible</span>
+                    {% else %}
+                        <span class="indisponible">Emprunté</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_livre_show', {'id': livre.id}) }}" class="btn">Voir</a>
+                    <a href="{{ path('app_livre_edit', {'id': livre.id}) }}" class="btn btn-warning">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 40px;">
+                    Aucun livre dans cette catégorie.
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

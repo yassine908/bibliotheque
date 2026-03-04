@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h2>Détails du livre</h2>
+
+<div style="background: #f9f9f9; padding: 25px; border-radius: 10px; margin: 20px 0;">
+    <h3 style="color: #2c3e50; margin-bottom: 15px;">{{ livre.titre }}</h3>
+
+    <p><strong>Auteur :</strong> {{ livre.auteur }}</p>
+    <p><strong>Année :</strong> {{ livre.annee }}</p>
+    <p><strong>Résumé :</strong><br>
+       {{ livre.resume ?: 'Aucun résumé disponible' }}
+    </p>
+    <p><strong>Statut :</strong>
+        {% if livre.disponible %}
+            <span class="disponible">Disponible</span>
+        {% else %}
+            <span class="indisponible">Emprunté</span>
+        {% endif %}
+    </p>
+</div>
+
+<a href="{{ path('app_livre_edit', {'id': livre.id}) }}" class="btn btn-warning">Modifier</a>
+<a href="{{ path('app_livre_index') }}" class="btn">Retour à la liste</a>
+{% endblock %}

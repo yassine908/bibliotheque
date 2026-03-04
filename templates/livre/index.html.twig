@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2>Liste des livres</h2>
+    <a href="{{ path('app_livre_new') }}" class="btn btn-success">Ajouter un livre</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Année</th>
+            <th>Catégorie</th>
+            <th>Disponibilité</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for livre in livres %}
+            <tr>
+                <td>{{ livre.titre }}</td>
+                <td>{{ livre.auteur }}</td>
+                <td>{{ livre.annee }}</td>
+                <td>{{ livre.categorie ? livre.categorie.nom : '—' }}</td>
+                <td>
+                    {% if livre.disponible %}
+                        <span class="disponible">Disponible</span>
+                    {% else %}
+                        <span class="indisponible">Emprunté</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_livre_show', {'id': livre.id}) }}" class="btn">Voir</a>
+                    <a href="{{ path('app_livre_edit', {'id': livre.id}) }}" class="btn btn-warning">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px;">
+                    Aucun livre dans la bibliothèque.
+                    <a href="{{ path('app_livre_new') }}">Ajoutez votre premier livre</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
