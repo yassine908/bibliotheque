@@ -1,25 +1,59 @@
 {% extends 'base.html.twig' %}
+{% block title %}{{ livre.titre }} — Bibliothèque{% endblock %}
 
 {% block body %}
-<h2>Détails du livre</h2>
-
-<div style="background: #f9f9f9; padding: 25px; border-radius: 10px; margin: 20px 0;">
-    <h3 style="color: #2c3e50; margin-bottom: 15px;">{{ livre.titre }}</h3>
-
-    <p><strong>Auteur :</strong> {{ livre.auteur }}</p>
-    <p><strong>Année :</strong> {{ livre.annee }}</p>
-    <p><strong>Résumé :</strong><br>
-       {{ livre.resume ?: 'Aucun résumé disponible' }}
-    </p>
-    <p><strong>Statut :</strong>
-        {% if livre.disponible %}
-            <span class="disponible">Disponible</span>
-        {% else %}
-            <span class="indisponible">Emprunté</span>
-        {% endif %}
-    </p>
+<div class="page-header">
+    <div>
+        <h2>Fiche du livre</h2>
+        <p class="sub">Détail complet de l'ouvrage</p>
+    </div>
+    <a href="{{ path('app_livre_index') }}" class="btn btn-ghost">Retour au catalogue</a>
 </div>
 
-<a href="{{ path('app_livre_edit', {'id': livre.id}) }}" class="btn btn-warning">Modifier</a>
-<a href="{{ path('app_livre_index') }}" class="btn">Retour à la liste</a>
+<div class="book-detail">
+    <div class="book-hero" data-letter="{{ livre.titre|slice(0,1)|upper }}">
+        <span class="hero-cat">
+            {% if livre.categorie %}{{ livre.categorie.nom }}{% else %}Sans catégorie{% endif %}
+        </span>
+        <h3>{{ livre.titre }}</h3>
+        <p class="hero-author">{{ livre.auteur }}</p>
+        <div class="hero-rule"></div>
+    </div>
+
+    <div class="book-body">
+        <div class="meta-strip">
+            <div class="meta-cell">
+                <label>Auteur</label>
+                <span>{{ livre.auteur }}</span>
+            </div>
+            <div class="meta-cell">
+                <label>Année</label>
+                <span>{{ livre.annee }}</span>
+            </div>
+            <div class="meta-cell">
+                <label>Disponibilité</label>
+                <span>
+                    {% if livre.disponible %}
+                        <span class="badge badge-avail">Disponible</span>
+                    {% else %}
+                        <span class="badge badge-unavail">Emprunté</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="resume-block">
+            {% if livre.resume %}
+                <p>{{ livre.resume }}</p>
+            {% else %}
+                <p style="color: var(--text-muted);">Aucun résumé disponible pour cet ouvrage.</p>
+            {% endif %}
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ path('app_livre_edit', {'id': livre.id}) }}" class="btn btn-sepia">Modifier</a>
+            <a href="{{ path('app_livre_index') }}" class="btn btn-ghost">Catalogue</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,54 +1,78 @@
 {% extends 'base.html.twig' %}
+{% block title %}Modifier — {{ livre.titre }}{% endblock %}
 
 {% block body %}
-    <h2>Modifier le livre</h2>
+<div class="page-header">
+    <div>
+        <h2>Modifier</h2>
+        <p class="sub" style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.95rem; letter-spacing:0.03em; text-transform:none;">
+            « {{ livre.titre }} »
+        </p>
+    </div>
+    <a href="{{ path('app_livre_index') }}" class="btn btn-ghost">Retour</a>
+</div>
 
-    <form method="post" style="margin-top: 30px;">
+<div class="form-card">
+    <form method="post">
         <div class="form-group">
-            <label for="titre">Titre *</label>
-            <input type="text" id="titre" name="titre" class="form-control" value="{{ livre.titre }}" required>
+            <label class="form-label" for="titre">Titre</label>
+            <input type="text" id="titre" name="titre" class="form-control"
+                   value="{{ livre.titre }}" required>
         </div>
 
         <div class="form-group">
-            <label for="auteur">Auteur *</label>
-            <input type="text" id="auteur" name="auteur" class="form-control" value="{{ livre.auteur }}" required>
+            <label class="form-label" for="auteur">Auteur</label>
+            <input type="text" id="auteur" name="auteur" class="form-control"
+                   value="{{ livre.auteur }}" required>
+        </div>
+
+        <div class="form-grid-2">
+            <div class="form-group">
+                <label class="form-label" for="annee">Année</label>
+                <input type="number" id="annee" name="annee" class="form-control"
+                       value="{{ livre.annee }}" min="1000" max="2099" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="categorie">Catégorie</label>
+                <select id="categorie" name="categorie" class="form-control">
+                    <option value="">Aucune</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}"
+                            {% if livre.categorie and livre.categorie.id == cat.id %}selected{% endif %}>
+                            {{ cat.nom }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="annee">Année de publication *</label>
-            <input type="number" id="annee" name="annee" class="form-control" value="{{ livre.annee }}" min="1900" max="2024" required>
+            <label class="form-label" for="resume">Résumé</label>
+            <textarea id="resume" name="resume" class="form-control">{{ livre.resume }}</textarea>
         </div>
 
         <div class="form-group">
-            <label for="categorie">Catégorie</label>
-            <select id="categorie" name="categorie" class="form-control">
-                <option value="">-- Aucune catégorie --</option>
-                {% for cat in categories %}
-                    <option value="{{ cat.id }}" {% if livre.categorie and livre.categorie.id == cat.id %}selected{% endif %}>{{ cat.nom }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="resume">Résumé</label>
-            <textarea id="resume" name="resume" class="form-control" rows="5">{{ livre.resume }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label>
-                <input type="checkbox" name="disponible" value="1" {% if livre.disponible %}checked{% endif %}>
-                Disponible
+            <label class="check-row">
+                <input type="checkbox" name="disponible" value="1"
+                       {% if livre.disponible %}checked{% endif %}>
+                <span>Disponible à l'emprunt</span>
             </label>
         </div>
 
-        <button type="submit" class="btn btn-success">Mettre à jour</button>
-        <a href="{{ path('app_livre_index') }}" class="btn">Annuler</a>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-dark">Enregistrer</button>
+            <a href="{{ path('app_livre_show', {'id': livre.id}) }}" class="btn btn-ghost">Annuler</a>
+        </div>
     </form>
+</div>
 
-    <form method="post" action="{{ path('app_livre_delete', {'id': livre.id}) }}" 
-          style="margin-top: 30px;" 
-          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?');">
+<div class="danger-zone">
+    <p class="danger-label">Zone de suppression</p>
+    <p>Cette action est définitive. L'ouvrage sera retiré du catalogue de façon permanente.</p>
+    <form method="post" action="{{ path('app_livre_delete', {'id': livre.id}) }}"
+          onsubmit="return confirm('Supprimer définitivement « {{ livre.titre }} » ?');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ livre.id) }}">
-        <button type="submit" class="btn btn-danger">Supprimer le livre</button>
+        <button type="submit" class="btn btn-danger">Supprimer cet ouvrage</button>
     </form>
+</div>
 {% endblock %}
